@@ -1,0 +1,18 @@
+{
+  "name": "phproberto/joomla-entity-pkg",
+  "description": "Package containing installable version of joomla-entity",
+  "keywords": ["joomla", "entity", "orm"],
+  "homepage": "https://github.com/phproberto/joomla-entity-pkg",
+  "license": "LGPL-2.1+",
+  "authors": [
+      {
+          "name": "Roberto Segura López",
+          "email": "roberto@phproberto.com",
+          "homepage": "http://phproberto.com"
+      }
+  ],
+  "require": {
+    "php": "^7.0",
+    "phproberto/joomla-entity": "1.7.2"
+  }
+}

@@ -1,0 +1,55 @@
+[
+    {
+        "name": "phproberto/joomla-entity",
+        "version": "v1.7.2",
+        "version_normalized": "1.7.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/phproberto/joomla-entity.git",
+            "reference": "7e932b3b102c8c493ce04a8438b2dda03ccac697"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/phproberto/joomla-entity/zipball/7e932b3b102c8c493ce04a8438b2dda03ccac697",
+            "reference": "7e932b3b102c8c493ce04a8438b2dda03ccac697",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^7.0"
+        },
+        "require-dev": {
+            "joomla/coding-standards": "~2.0@alpha",
+            "phpunit/phpunit": "^4.8.35",
+            "squizlabs/php_codesniffer": "^2.8"
+        },
+        "time": "2018-11-10T00:49:50+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": []
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Phproberto\\Joomla\\Entity\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1+"
+        ],
+        "authors": [
+            {
+                "name": "Roberto Segura López",
+                "email": "roberto@phproberto.com",
+                "homepage": "http://phproberto.com"
+            }
+        ],
+        "description": "Entities for Joomla!",
+        "homepage": "https://github.com/phproberto/joomla-entity",
+        "keywords": [
+            "entity",
+            "joomla",
+            "orm"
+        ]
+    }
+]

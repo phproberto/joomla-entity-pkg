@@ -1,0 +1,16 @@
+# PHPStorm
+/.idea/*
+
+# Build
+gulp-config.json
+node_modules/
+/build/releases
+.scannerwork
+
+# Composer
+/vendor/
+composer.lock
+
+# Tests
+/tests/coverage
+phpunit.xml
