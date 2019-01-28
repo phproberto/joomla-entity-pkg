@@ -3,7 +3,7 @@
  * @package     Phproberto\Joomla\Entity
  * @subpackage  Library
  *
- * @copyright   Copyright (C) 2018 Roberto Segura López. All rights reserved.
+ * @copyright   Copyright (C) 2018-2019 Roberto Segura López. All rights reserved.
  * @license     GNU General Public License version 2 or later; http://www.gnu.org/licenses/gpl-2.0.html
  */
 
