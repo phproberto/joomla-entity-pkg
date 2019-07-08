@@ -2,7 +2,7 @@
 /**
  * Joomla! entity library.
  *
- * @copyright  Copyright (C) 2017-2018 Roberto Segura López, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2017-2019 Roberto Segura López, Inc. All rights reserved.
  * @license    See COPYING.txt
  */
 
@@ -12,14 +12,14 @@ defined('_JEXEC') || die;
 
 use Joomla\Utilities\ArrayHelper;
 use Phproberto\Joomla\Entity\Content\Category;
-use Phproberto\Joomla\Entity\Categories\Search\CategorySearch as BaseCategorySearc;
+use Phproberto\Joomla\Entity\Categories\Search\CategorySearch as BaseCategorySearch;
 
 /**
  * Category search.
  *
  * @since  1.6.0
  */
-class CategorySearch extends BaseCategorySearc
+class CategorySearch extends BaseCategorySearch
 {
 	/**
 	 * Retrieve the search query.

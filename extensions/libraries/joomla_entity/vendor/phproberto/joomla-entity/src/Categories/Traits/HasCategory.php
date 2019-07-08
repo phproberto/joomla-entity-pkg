@@ -2,7 +2,7 @@
 /**
  * Joomla! entity library.
  *
- * @copyright  Copyright (C) 2017-2018 Roberto Segura López, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2017-2019 Roberto Segura López, Inc. All rights reserved.
  * @license    See COPYING.txt
  */
 
@@ -56,7 +56,7 @@ trait HasCategory
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.7.2
 	 */
 	public function categoryId()
 	{
@@ -75,7 +75,7 @@ trait HasCategory
 	 *
 	 * @return  string
 	 *
-	 * @deprecated  __DEPLOY_VERSION__  Use column aliases
+	 * @deprecated  1.7.2  Use column aliases
 	 */
 	protected function getColumnCategory()
 	{

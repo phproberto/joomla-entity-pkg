@@ -2,7 +2,7 @@
 /**
  * Joomla! entity library.
  *
- * @copyright  Copyright (C) 2017-2018 Roberto Segura López, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2017-2019 Roberto Segura López, Inc. All rights reserved.
  * @license    See COPYING.txt
  */
 
@@ -26,6 +26,18 @@ trait HasParent
 	 * @var  EntityInterface
 	 */
 	protected $parent;
+
+	/**
+	 * Check if this entity has an assigned parent.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   1.8
+	 */
+	public function hasParent()
+	{
+		return $this->parentId() > 0;
+	}
 
 	/**
 	 * Load the parent entity.
