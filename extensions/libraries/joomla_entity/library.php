@@ -20,4 +20,4 @@ if (file_exists($composerAutoload))
 
 // Load library language
 $lang = Factory::getLanguage();
-$lang->load('lib_joomla_entity', __DIR__);
+$lang->load('lib_phproberto_joomla_entity', __DIR__);

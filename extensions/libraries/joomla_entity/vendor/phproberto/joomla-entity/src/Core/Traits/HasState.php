@@ -10,7 +10,7 @@ namespace Phproberto\Joomla\Entity\Core\Traits;
 
 defined('_JEXEC') || die;
 
-use Phproberto\Joomla\Entity\Core\Column;
+use Phproberto\Joomla\Entity\Core\CoreColumn;
 
 /**
  * Trait for entities with state.
@@ -141,6 +141,19 @@ trait HasState
 	 */
 	public function state()
 	{
-		return (int) $this->get($this->columnAlias(Column::STATE));
+		return (int) $this->get($this->columnAlias(CoreColumn::STATE));
+	}
+
+	/**
+	 * Get the name of the entity state.
+	 *
+	 * @return  string
+	 */
+	public function stateName()
+	{
+		$state = $this->state();
+		$availableStates = $this->availableStates();
+
+		return isset($availableStates[$state]) ? $availableStates[$state] : '';
 	}
 }

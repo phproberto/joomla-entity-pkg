@@ -13,6 +13,6 @@
   ],
   "require": {
     "php": "^7.0",
-    "phproberto/joomla-entity": "1.8.0"
+    "phproberto/joomla-entity": "2.0.0"
   }
 }

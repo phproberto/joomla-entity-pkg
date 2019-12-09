@@ -10,10 +10,12 @@ namespace Phproberto\Joomla\Entity;
 
 defined('_JEXEC') || die;
 
+use Joomla\CMS\Table\Table;
 use Joomla\CMS\Table\Nested;
 use Joomla\Registry\Registry;
-use Joomla\Utilities\ArrayHelper;
-use Phproberto\Joomla\Entity\Core\Column;
+use Phproberto\Joomla\Entity\Core\CoreColumn;
+use Phproberto\Joomla\Entity\Helper\ClassName;
+use Phproberto\Joomla\Entity\Helper\ArrayHelper;
 use Phproberto\Joomla\Entity\Exception\SaveException;
 use Phproberto\Joomla\Entity\Contracts\EntityInterface;
 use Phproberto\Joomla\Entity\Core\Traits as CoreTraits;
@@ -44,7 +46,7 @@ abstract class Entity implements EntityInterface
 	 *
 	 * @var  array
 	 */
-	protected $row;
+	protected $row = [];
 
 	/**
 	 * Constructor.
@@ -95,11 +97,6 @@ abstract class Entity implements EntityInterface
 	 */
 	public function assign($property, $value)
 	{
-		if (null === $this->row)
-		{
-			$this->row = array();
-		}
-
 		$this->row[$property] = $value;
 
 		if ($property === $this->primaryKey())
@@ -126,24 +123,41 @@ abstract class Entity implements EntityInterface
 
 		$data = (array) $data;
 
-		if (null === $this->row)
+		foreach ($data as $column => $value)
 		{
-			$this->row = array();
-		}
-
-		$primaryKey = $this->primaryKey();
-
-		foreach ($data as $property => $value)
-		{
-			$this->row[$property] = $value;
-
-			if ($property === $primaryKey)
-			{
-				$this->id = (int) $data[$primaryKey];
-			}
+			$this->assign($column, $value);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Bind data to the entity.
+	 *
+	 * @param   mixed  $data  array | \stdClass Data to bind
+	 *
+	 * @return  self
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function bindWithoutOverwrite($data)
+	{
+		if (!is_array($data) && !$data instanceof \stdClass)
+		{
+			throw new \InvalidArgumentException(sprintf("Invalid data sent for %s::%s()", __CLASS__, __FUNCTION__));
+		}
+
+		$data = (array) $data;
+
+		foreach ($data as $column => $value)
+		{
+			if ($this->has($column))
+			{
+				unset($data[$column]);
+			}
+		}
+
+		return $this->bind($data);
 	}
 
 	/**
@@ -251,6 +265,18 @@ abstract class Entity implements EntityInterface
 	}
 
 	/**
+	 * Default data binded before saving for new instances.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function defaults()
+	{
+		return [];
+	}
+
+	/**
 	 * Delete one or more entities by their primary key.
 	 *
 	 * @param   integer|array  $ids  And identifier or array of identifiers
@@ -261,13 +287,7 @@ abstract class Entity implements EntityInterface
 	 */
 	public static function delete($ids)
 	{
-		$ids = array_filter(
-			ArrayHelper::toInteger((array) $ids),
-			function ($value)
-			{
-				return (int) $value > 0;
-			}
-		);
+		$ids = ArrayHelper::toPositiveIntegers((array) $ids);
 
 		if (empty($ids))
 		{
@@ -598,17 +618,14 @@ abstract class Entity implements EntityInterface
 	{
 		$class = get_class($this);
 
-		if (false !== strpos($class, '\\'))
+		if (!ClassName::inNamespace($this))
 		{
-			$suffix = rtrim(strstr($class, 'Entity'), '\\');
-			$parts = explode("\\", $suffix);
+			$parts = explode('Entity', $class, 2);
 
 			return $parts ? strtolower(end($parts)) : null;
 		}
 
-		$parts = explode('Entity', $class, 2);
-
-		return $parts ? strtolower(end($parts)) : null;
+		return strtolower(ClassName::withoutNamespace($class));
 	}
 
 	/**
@@ -656,16 +673,14 @@ abstract class Entity implements EntityInterface
 	 */
 	public function save()
 	{
+		if (!$this->hasId())
+		{
+			$this->bindWithoutOverwrite($this->defaults());
+		}
+
 		if ($this instanceof Validable)
 		{
-			try
-			{
-				$this->validate();
-			}
-			catch (ValidationException $e)
-			{
-				throw SaveException::validation($this, $e);
-			}
+			$this->validate();
 		}
 
 		$table = $this->table();
@@ -675,7 +690,7 @@ abstract class Entity implements EntityInterface
 			$table->load($this->id());
 		}
 
-		$parentColumn = $this->columnAlias(Column::PARENT);
+		$parentColumn = $this->columnAlias(CoreColumn::PARENT);
 
 		if (!$this->hasId() && $table instanceof Nested && $this->has($parentColumn))
 		{
@@ -772,9 +787,12 @@ abstract class Entity implements EntityInterface
 	 */
 	public function table($name = '', $prefix = null, $options = array())
 	{
-		$table = \JTable::getInstance($name, $prefix, $options);
+		$name   = $name ?: $this->tableName();
+		$prefix = $prefix ?: $this->tablePrefix();
 
-		if (!$table instanceof \JTable)
+		$table = Table::getInstance($name, $prefix, $options);
+
+		if (!$table instanceof Table)
 		{
 			throw new \InvalidArgumentException(
 				sprintf("Cannot find the table `%s`.", $prefix . $name)
@@ -782,6 +800,70 @@ abstract class Entity implements EntityInterface
 		}
 
 		return $table;
+	}
+
+	/**
+	 * Associated table name.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function tableName()
+	{
+		return $this->ucfirstName();
+	}
+
+	/**
+	 * Associated table prefix.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function tablePrefix()
+	{
+		$class = get_class($this);
+
+		if (!ClassName::inNamespace($this))
+		{
+			$parts = explode('Entity', $class, 2);
+
+			return $parts ? $parts[0] . 'Table' : '';
+		}
+
+		$namespaceParts = ClassName::namespaceParts($class);
+		$lastNamespacePart = end($namespaceParts);
+
+		// Asume namespace contains Entity folder with entities. Example: Content/Entity/Article -> Should return Content
+		if ('Entity' === $lastNamespacePart)
+		{
+			return isset($namespaceParts[count($namespaceParts) - 2]) ? $namespaceParts[count($namespaceParts) - 2] . 'Table' : '';
+		}
+
+		return $lastNamespacePart . 'Table';
+	}
+
+	/**
+	 * Uppercase first letter of each part of the name of this entity.
+	 * Example: payment_method will return Payment_Method
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function ucfirstName()
+	{
+		return implode(
+			'_',
+			array_map(
+				function ($part)
+				{
+					return ucfirst(strtolower($part));
+				},
+				explode('_', $this->name())
+			)
+		);
 	}
 
 	/**

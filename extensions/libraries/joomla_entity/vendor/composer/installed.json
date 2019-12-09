@@ -1,17 +1,17 @@
 [
     {
         "name": "phproberto/joomla-entity",
-        "version": "v1.8.0",
-        "version_normalized": "1.8.0.0",
+        "version": "v2.0.0",
+        "version_normalized": "2.0.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phproberto/joomla-entity.git",
-            "reference": "696a902cf1b72c87c80028fd118a65b9d7b7df6f"
+            "reference": "79e0228a07530270dd2d36e3e34cd181afffbbf9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phproberto/joomla-entity/zipball/696a902cf1b72c87c80028fd118a65b9d7b7df6f",
-            "reference": "696a902cf1b72c87c80028fd118a65b9d7b7df6f",
+            "url": "https://api.github.com/repos/phproberto/joomla-entity/zipball/79e0228a07530270dd2d36e3e34cd181afffbbf9",
+            "reference": "79e0228a07530270dd2d36e3e34cd181afffbbf9",
             "shasum": ""
         },
         "require": {
@@ -22,11 +22,11 @@
             "phpunit/phpunit": "^4.8.35",
             "squizlabs/php_codesniffer": "^2.8"
         },
-        "time": "2019-07-08T09:08:09+00:00",
+        "time": "2019-12-09T09:13:27+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.9-dev"
+                "dev-master": "2.0-dev"
             }
         },
         "installation-source": "dist",
